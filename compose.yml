@@ -1,0 +1,14 @@
+---
+services:
+  web:
+    build: .
+    container_name: interceptarr
+    environment:
+    - TZ=America/New_York
+    ports:
+      - "8700:8700"  # Change the port to whatever you want as long as it matches the port in your .env file and dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./interceptarr_logs.txt:/app/interceptarr_logs.txt
+    restart: unless-stopped
