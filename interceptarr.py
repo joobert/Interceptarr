@@ -12,7 +12,7 @@ load_dotenv()
 
 # Configuration from environment variables
 DISCORD_WEBHOOK_URL = os.getenv('DISCORD_WEBHOOK_URL')
-SHOW_EPISODE_THUMBNAIL = os.getenv('SHOW_EPISODE_THUMBNAIL', False)
+SHOW_EPISODE_THUMBNAIL = os.getenv('SHOW_EPISODE_THUMBNAIL', 'True')
 HOST = os.getenv('WEBHOOK_HOST')
 PORT = int(os.getenv('WEBHOOK_PORT', 8700))
 
@@ -27,7 +27,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def get_episode_info(series_title, season, episode, series_url):
     logging.info(f"Searching TVDB for: {series_title}, Season: {season}, Episode: {episode}")
 
-    # Search for the series season
+    # Search for the series season data on TVDB
     season_url = f"{series_url}/seasons/official/{season}"
     try:
         response = requests.get(season_url)
