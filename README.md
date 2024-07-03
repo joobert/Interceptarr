@@ -50,7 +50,7 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 3. Create a `.env` file with the following content:
     ```env
     DISCORD_WEBHOOK_URL=your_webhook_url
-    SHOW_EPISODE_THUMBNAIL=False
+    SHOW_EPISODE_THUMBNAIL=True
     WEBHOOK_HOST=your_host_ip
     WEBHOOK_PORT=8700
     ```
@@ -73,7 +73,7 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 2. Create a `.env` file with the following content:
     ```env
     DISCORD_WEBHOOK_URL=your_webhook_url
-    SHOW_EPISODE_THUMBNAIL=False
+    SHOW_EPISODE_THUMBNAIL=True
     WEBHOOK_HOST=your_host_ip
     WEBHOOK_PORT=8700
     ```
