@@ -94,7 +94,7 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 
 Once the script or container is running, the application will be listening for webhook events on the specified IP address and port.
 
-- **Webhook Listener**: The application listens for POST requests at the endpoint (`/webhook`) and processes incoming webhook data.
+- **Webhook Listener**: The application listens for POST requests at the endpoint `/webhook` and processes incoming webhook data.
 - **Logging**: All events and errors are logged to `interceptarr_logs.txt`.
 
 ## Contributing
