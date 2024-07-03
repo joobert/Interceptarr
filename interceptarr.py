@@ -50,11 +50,11 @@ def get_episode_info(series_title, season, episode, series_url):
                         logging.info(f"First aired date for S{season}E{episode}: {first_aired_date_formatted}")
                         return first_aired_date_raw, first_aired_date_formatted, episode_url
         else:
-            logging.warning("Table not found")
+            logging.warning("Episode table not found")
     except requests.RequestException as e:
-        logging.error(f"Error fetching season data: {e}")
+        logging.error(f"Error fetching episode data from TVDB: {e}")
 
-    return None, None
+    return None, None, None
 
 # Get the thumbnail URL for a given episode
 def get_episode_thumbnail(episode_url):
@@ -84,7 +84,7 @@ def webhook_listener():
                 title_parts = embed['title'].split(' - ')
                 if len(title_parts) == 3:
                     series_title, season_episode, episode_title = title_parts
-                    season, episode = map(lambda x: x.lstrip('0'), season_episode.split('x'))
+                    season, episode = map(lambda x: x.lstrip('0'), season_episode.split('x', 1))
                     logging.info(f"Processing episode: {series_title}, Episode: {season_episode} - {episode_title}")
 
                     # Directly use the URL from the embed
