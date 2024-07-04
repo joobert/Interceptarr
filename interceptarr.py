@@ -87,8 +87,9 @@ def webhook_listener():
                     season, episode = map(lambda x: x.lstrip('0'), season_episode.split('x', 1))
                     logging.info(f"Processing episode: {series_title}, Episode: {season_episode} - {episode_title}")
 
-                    # Directly use the URL from the embed
-                    series_url = embed['url']
+                    # Get the base URL for the series on TVDB and the URL it redirects to
+                    series_url_base = embed['url']
+                    series_url = requests.get(series_url_base).url
 
                     # Extract the overview from the fields so the embed can be reformatted
                     overview = next((field.get('value', '') for field in embed.get('fields', []) if field.get('name') == 'Overview'), '')
