@@ -25,14 +25,15 @@
 ## Configuration
 
 Create a '**.env**' file in the same directory as the script with the following variables:
-- **DISCORD_WEBHOOK_URL**: The Discord webhook URL where notifications will be sent.
+- **DISCORD_WEBHOOK_URL**: The Discord webhook URL where notifications for new episodes will be sent.
+- **DISCORD_OVERRIDE_WEBHOOK_URL**: Optionally assign a Discord webhook URL where warning messages will be sent if the original embed data from Sonarr is overwritten with new data from TVDB. (Leave this blank unless "Episode Title Required" is set to "Never" in your Sonarr settings.)
 - **SHOW_EPISODE_THUMBNAIL**: Optionally replace the generic show thumbnail with the episode thumbnail.
 - **WEBHOOK_HOST**: The IP address or hostname the Flask app will bind to.
 - **WEBHOOK_PORT**: The port the Flask app will listen on.
 
 ## Sonarr Configuration
 
-To integrate Interceptarr with Sonarr, create a new connection in Sonarr with only the "On Import" notification trigger checked, and set the connection's webhook URL to point to the IP address and port where Interceptarr is running with `/webhook` appended to the end. (e.g., '**http://10.0.0.1:8700/webhook**')
+To integrate Interceptarr with Sonarr, create a new connection in Sonarr with only the "On Import" notification trigger checked, and set the connection's webhook URL to point to the IP address and port where Interceptarr is running (e.g., '**http://10.0.0.1:8700**')
 
 ### Installation
 
@@ -50,6 +51,7 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 3. Create a `.env` file with the following content:
     ```env
     DISCORD_WEBHOOK_URL=your_webhook_url
+    DISCORD_OVERRIDE_WEBHOOK_URL=your_alt_webhook_url
     SHOW_EPISODE_THUMBNAIL=True
     WEBHOOK_HOST=your_host_ip
     WEBHOOK_PORT=8700
@@ -73,6 +75,7 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 2. Create a `.env` file with the following content:
     ```env
     DISCORD_WEBHOOK_URL=your_webhook_url
+    DISCORD_OVERRIDE_WEBHOOK_URL=your_alt_webhook_url
     SHOW_EPISODE_THUMBNAIL=True
     WEBHOOK_HOST=your_host_ip
     WEBHOOK_PORT=8700
@@ -87,14 +90,14 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 
 5. Start the service with Docker Compose:
     ```sh
-    docker-compose up -d
+    docker compose up -d
     ```
 
 ## Usage
 
 Once the script or container is running, the application will be listening for webhook events on the specified IP address and port.
 
-- **Webhook Listener**: The application listens for POST requests at the endpoint `/webhook` and processes incoming webhook data.
+- **Webhook Listener**: The application listens for POST requests at the root endpoint `/` and processes incoming webhook data.
 - **Logging**: All events and errors are logged to `interceptarr_logs.txt`.
 
 ## Contributing
