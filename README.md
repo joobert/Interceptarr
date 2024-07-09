@@ -33,7 +33,7 @@ Create a '**.env**' file in the same directory as the script with the following 
 
 ## Sonarr Configuration
 
-To integrate Interceptarr with Sonarr, create a new connection in Sonarr with only the "On Import" notification trigger checked, and set the connection's webhook URL to point to the IP address and port where Interceptarr is running (e.g., '**http://10.0.0.1:8700**')
+To integrate Interceptarr with Sonarr, create a new connection in Sonarr with only the "On Import" notification trigger checked, and set the connection's webhook URL to point to the IP address and port where Interceptarr is running. (e.g., '**http://10.0.0.1:8700**')
 
 ### Installation
 
