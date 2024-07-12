@@ -147,6 +147,7 @@ def webhook_listener():
 
                     # Get the first aired date and episode URL from TVDB
                     first_aired_date_raw, first_aired_date_formatted, episode_url, episode_title_tvdb = get_episode_info(series_title, season, episode, series_url)
+                    full_title = f"{series_title} - {season_episode} - {episode_title_tvdb}"
                     if first_aired_date_formatted:
                         first_aired_date_formatted = datetime.strptime(first_aired_date_formatted, '%Y-%m-%d')
                         if first_aired_date_formatted > datetime.now() - timedelta(weeks=1):
@@ -155,7 +156,6 @@ def webhook_listener():
                             # Update the embed with the episode title from TVDB if it differs from the webhook data
                             if episode_title_tvdb != episode_title:
                                 logging.info(f"Episode title found in webhook data from Sonarr is improper. Updating episode title to: {episode_title_tvdb}")
-                                full_title = f"{series_title} - {season_episode} - {episode_title_tvdb}"
                                 embed.update({'title': f"{full_title}"})
                                 embed_overwritten = True
 
@@ -165,11 +165,14 @@ def webhook_listener():
                                 overview = get_episode_overview(episode_url)
                                 embed_overwritten = True
 
-                            # Prepare and overwrite the data to forward to the Discord webhook
+                            # Prepare the new embed data
                             fields = [
                                 {"name": "Released", "value": f"{first_aired_date_raw}", "inline": True},
-                                {"name": "Overview", "value": f"{overview}", "inline": False},
                             ]
+                            if overview:
+                                fields.append({"name": "Overview", "value": f"{overview}", "inline": False})
+
+                            # Update the embed with the new data
                             embed.update({
                                 'author': {'name': "New Episode Now Available"},
                                 'description': '',
@@ -177,7 +180,7 @@ def webhook_listener():
                                 'fields': fields
                             })
 
-                            # Optionally include the episode thumbnail
+                            # Optionally include the episode thumbnail if TVDB has one
                             if SHOW_EPISODE_THUMBNAIL == 'True':
                                 thumbnail_url = get_episode_thumbnail(episode_url)
                                 if thumbnail_url is not None:
