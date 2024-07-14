@@ -2,7 +2,7 @@ import os
 import requests
 import logging
 import re
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
@@ -24,6 +24,11 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
     logging.FileHandler(log_file),
     logging.StreamHandler()
 ])
+
+# Route to serve the log file to the endpoint '/logs'
+@app.route('/logs', methods=['GET'])
+def get_logs():
+    return send_file(log_file, as_attachment=False)
 
 # Get the first aired date for a given series, season, and episode
 def get_episode_info(series_title, season, episode, series_url):
