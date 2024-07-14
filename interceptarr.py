@@ -1,6 +1,7 @@
 import os
 import requests
 import logging
+import re
 from flask import Flask, request, jsonify
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
@@ -153,8 +154,8 @@ def webhook_listener():
                         if first_aired_date_formatted > datetime.now() - timedelta(weeks=1):
                             logging.info("First aired date is within the last week, continuing...")
 
-                            # Update the embed with the episode title from TVDB if it differs from the webhook data
-                            if episode_title_tvdb != episode_title:
+                            # Update the embed with the episode title from TVDB if it differs from the webhook data and does not contain special characters
+                            if episode_title_tvdb != episode_title and re.match(r'^[a-zA-Z0-9\s.,!?-]+$', episode_title_tvdb):
                                 logging.info(f"Episode title found in webhook data from Sonarr is improper. Updating episode title to: {episode_title_tvdb}")
                                 embed.update({'title': f"{full_title}"})
                                 embed_overwritten = True
