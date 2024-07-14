@@ -13,11 +13,12 @@
 - Listens for webhook events from Sonarr and processes incoming data.
 - Fetches and parses data from TVDB to extract episode air dates.
 - Forwards processed data to a Discord webhook if the episode is less than a week old.
-- Logs all events and errors to `interceptarr_logs.txt`.
+- Logs all events and errors to the endpoint `/logs` and saves to `interceptarr_logs.txt`.
 
 ## Prerequisites
 
 - Python 3.7+
+- `Flask` library
 - `requests` library
 - `beautifulsoup4` library
 - `python-dotenv` library
@@ -98,7 +99,7 @@ To integrate Interceptarr with Sonarr, create a new connection in Sonarr with on
 Once the script or container is running, the application will be listening for webhook events on the specified IP address and port.
 
 - **Webhook Listener**: The application listens for POST requests at the root endpoint `/` and processes incoming webhook data.
-- **Logging**: All events and errors are logged to `interceptarr_logs.txt`.
+- **Logging**: All events and errors are logged to the endpoint `/logs` and saved to `interceptarr_logs.txt`.
 
 ## Contributing
 
