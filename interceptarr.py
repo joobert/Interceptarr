@@ -56,6 +56,8 @@ def get_episode_info(series_title, season, episode, series_url):
                         episode_hyperlink = cols[1].find('a')
                         episode_url = "https://thetvdb.com" + episode_hyperlink['href']
                         episode_title_tvdb = episode_hyperlink.text.strip()
+                        if episode_title_tvdb == "TBA":
+                            fetch_title_directly(episode_title_tvdb, episode_url)
                         logging.info(f"First aired date for S{season}E{episode}: {first_aired_date_formatted}")
                         return first_aired_date_raw, first_aired_date_formatted, episode_url, episode_title_tvdb
         else:
@@ -103,6 +105,26 @@ def get_episode_overview(episode_url):
         logging.error(f"Error fetching episode overview: {e}")
 
     return None
+
+# Check if the episode title is "TBA"
+def fetch_title_directly(episode_title_tvdb, episode_url):
+    if episode_title_tvdb == "TBA":
+        logging.info(f"Episode title is 'TBA', fetching the title from {episode_url}")
+        try:
+            response = requests.get(episode_url)
+            response.raise_for_status()
+            soup = BeautifulSoup(response.content, 'html.parser')
+            translated_title = soup.find('h1', class_='translated_title mt-0')
+            print(translated_title)
+            if translated_title:
+                episode_title_tvdb = translated_title.text.strip()
+                logging.info(f"Updated episode title from TVDB: {episode_title_tvdb}")
+            else:
+                logging.info("Translated title not found on the page.")
+        except requests.RequestException as e:
+            logging.error(f"Error fetching episode title from {episode_url}: {e}")
+
+        return episode_title_tvdb
 
 # Notify a separate Discord webhook that the episode data was overwritten
 def notify_discord_on_overwrite(episode_title, episode_title_tvdb, episode_url, full_title):
@@ -160,7 +182,7 @@ def webhook_listener():
                             logging.info("First aired date is within the last week, continuing...")
 
                             # Update the embed with the episode title from TVDB if it differs from the webhook data and does not contain special characters
-                            if episode_title_tvdb != episode_title and re.match(r'^[a-zA-Z0-9\s.,!?-]+$', episode_title_tvdb):
+                            if episode_title_tvdb != episode_title and re.match(r'^[a-zA-Z0-9\s.,!?-]+$', episode_title_tvdb) and episode_title_tvdb != "TBA":
                                 logging.info(f"Episode title found in webhook data from Sonarr is improper. Updating episode title to: {episode_title_tvdb}")
                                 embed.update({'title': f"{full_title}"})
                                 embed_overwritten = True
